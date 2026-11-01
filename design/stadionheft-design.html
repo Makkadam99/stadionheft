@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Stadionheft – Meine Spiele</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#C4122F}a:hover{color:#8E0C22}
+.sh-stripes{background-color:#C4122F;background-image:repeating-linear-gradient(90deg,#C4122F 0 16px,#B30F2A 16px 32px)}
+.sh-rauten{background-color:#FFFFFF;background-image:linear-gradient(135deg,#1C5FA8 25%,transparent 25%),linear-gradient(225deg,#1C5FA8 25%,transparent 25%),linear-gradient(45deg,#1C5FA8 25%,transparent 25%),linear-gradient(315deg,#1C5FA8 25%,#FFFFFF 25%);background-position:6px 0,6px 0,0 0,0 0;background-size:12px 12px}
+.sh-scroll::-webkit-scrollbar{width:0}
+.sh-input:focus{outline:3px solid #1C5FA8;outline-offset:1px}
+button:focus-visible{outline:3px solid #1C5FA8;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #F4ECDC; color: #1B1B1B; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; overflow: hidden; position: relative; box-sizing: border-box">
+
+  <div class="sh-rauten" style="height: 12px; flex-shrink: 0" aria-hidden="true"></div>
+  <header class="sh-stripes" style="flex-shrink: 0; padding: 18px 20px 16px; border-bottom: 4px solid #1B1B1B; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 34px; line-height: 1; color: #FFFFFF; letter-spacing: 1px; text-shadow: 3px 3px 0 #1B1B1B">STADIONHEFT</span>
+      <span style="font-size: 15px; font-weight: 600; color: #FFF3E2; text-transform: uppercase; letter-spacing: 1.5px">{{headerSub}}</span>
+    </div>
+    <div style="width: 64px; height: 64px; border-radius: 50%; background: #FFFFFF; border: 3px solid #1B1B1B; box-shadow: 3px 3px 0 #1B1B1B; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box; padding: 3px">
+      <img src="/_blob/e4e33d440f2199fc4b135898b3c18fbd" alt="FC Bayern München" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%">
+    </div>
+  </header>
+
+  <main class="sh-scroll" style="flex: 1; overflow-y: auto; padding: 18px 16px 24px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box">
+
+    <sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+        <div style="background: #FFFBF3; border: 2px solid #1B1B1B; box-shadow: 3px 3px 0 #1B1B1B; padding: 8px 4px; display: flex; flex-direction: column; align-items: center">
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 24px; line-height: 1.1">{{total.n}}</span>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #4A4238">SPIELE</span>
+        </div>
+        <div style="background: #C4122F; color: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 3px 3px 0 #1B1B1B; padding: 8px 4px; display: flex; flex-direction: column; align-items: center">
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 24px; line-height: 1.1">{{total.w}}</span>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1px">SIEGE</span>
+        </div>
+        <div style="background: #E6DCC6; border: 2px solid #1B1B1B; box-shadow: 3px 3px 0 #1B1B1B; padding: 8px 4px; display: flex; flex-direction: column; align-items: center">
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 24px; line-height: 1.1">{{total.d}}</span>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #3A332B">REMIS</span>
+        </div>
+        <div style="background: #1B1B1B; color: #F4ECDC; border: 2px solid #1B1B1B; box-shadow: 3px 3px 0 #C4122F; padding: 8px 4px; display: flex; flex-direction: column; align-items: center">
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 24px; line-height: 1.1">{{total.l}}</span>
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1px">NIEDERL.</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; flex-wrap: wrap" role="group" aria-label="Nach Wettbewerb filtern">
+        <sc-for list="{{chips}}" as="chip" hint-placeholder-count="4">
+          <button type="button" onClick="{{chip.pick}}" aria-pressed="{{chip.pressed}}" style="{{chip.style}}"><sc-if value="{{chip.hasLogo}}" hint-placeholder-val="{{ true }}"><span style="width: 30px; height: 24px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; border: 1px solid #1B1B1B; box-sizing: border-box; padding: 1px"><img src="{{chip.logo}}" alt="" style="max-width: 26px; max-height: 20px; object-fit: contain"></span></sc-if>{{chip.label}}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{isEmpty}}" hint-placeholder-val="{{ false }}">
+        <div style="border: 2px dashed #8A7E6C; padding: 28px 16px; text-align: center; font-size: 18px; font-weight: 600; color: #4A4238">Noch keine Spiele in diesem Wettbewerb.</div>
+      </sc-if>
+
+      <sc-for list="{{cards}}" as="g" hint-placeholder-count="4">
+        <article style="background: #FFFBF3; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; display: flex; flex-direction: column">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 0">
+            <span style="display: flex; align-items: center; gap: 8px">
+              <span style="width: 48px; height: 32px; background: #FFFFFF; border: 2px solid #1B1B1B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 2px"><img src="{{g.logo}}" alt="" style="max-width: 42px; max-height: 26px; object-fit: contain"></span>
+              <span style="{{g.badgeStyle}}">{{g.compLabel}}</span>
+            </span>
+            <span style="font-size: 15px; font-weight: 600; color: #4A4238; letter-spacing: 0.5px">{{g.dateLabel}}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; padding: 12px 12px 14px">
+            <span style="{{g.homeStyle}}">{{g.homeName}}</span>
+            <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 26px; line-height: 1; background: #0E2A4F; color: #FFFFFF; padding: 8px 10px; white-space: nowrap; letter-spacing: 1px">{{g.homeGoals}}:{{g.awayGoals}}</span>
+            <span style="{{g.awayStyle}}">{{g.awayName}}</span>
+          </div>
+          <div style="border-top: 2px dashed #B9AD98; display: flex; align-items: center; justify-content: space-between; padding: 8px 12px">
+            <span style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4A4238">{{g.venue}}</span>
+            <span style="{{g.resStyle}}">{{g.resLabel}}</span>
+          </div>
+        </article>
+      </sc-for>
+    </sc-if>
+
+    <sc-if value="{{isAdd}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="sh-date" style="font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Datum</label>
+        <input id="sh-date" class="sh-input" type="date" value="{{form.date}}" onChange="{{setDate}}" style="height: 48px; border: 2px solid #1B1B1B; border-radius: 0; padding: 0 12px; font-family: 'Barlow Condensed', sans-serif; font-size: 19px; background: #FFFBF3; color: #1B1B1B; box-sizing: border-box; width: 100%">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span id="sh-comp-l" style="font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Wettbewerb</span>
+        <div role="group" aria-labelledby="sh-comp-l" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 2px solid #1B1B1B; background: #FFFBF3">
+          <sc-for list="{{compOpts}}" as="o" hint-placeholder-count="3">
+            <button type="button" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="{{o.style}}"><span style="width: 52px; height: 36px; background: #FFFFFF; border: 2px solid #1B1B1B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 2px"><img src="{{o.logo}}" alt="" style="max-width: 46px; max-height: 30px; object-fit: contain"></span>{{o.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span id="sh-venue-l" style="font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Spielort</span>
+        <div role="group" aria-labelledby="sh-venue-l" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 2px solid #1B1B1B; background: #FFFBF3">
+          <sc-for list="{{venueOpts}}" as="o" hint-placeholder-count="2">
+            <button type="button" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="{{o.style}}">{{o.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="sh-opp" style="font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Gegner</label>
+        <input id="sh-opp" class="sh-input" type="text" placeholder="z. B. VfB Stuttgart" value="{{form.opp}}" onChange="{{setOpp}}" style="height: 48px; border: 2px solid #1B1B1B; border-radius: 0; padding: 0 12px; font-family: 'Barlow Condensed', sans-serif; font-size: 19px; background: #FFFBF3; color: #1B1B1B; box-sizing: border-box; width: 100%">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Ergebnis</span>
+        <div style="background: #0E2A4F; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; padding: 14px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; color: #FFFFFF">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #DCE6F2">FC Bayern</span>
+            <div style="display: flex; align-items: center; gap: 8px">
+              <button type="button" onClick="{{decFcb}}" aria-label="Tor FC Bayern abziehen" style="width: 44px; height: 44px; border: 2px solid #FFFFFF; background: transparent; color: #FFFFFF; font-family: 'Alfa Slab One', Georgia, serif; font-size: 22px; cursor: pointer">−</button>
+              <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 40px; line-height: 1; min-width: 30px; text-align: center">{{form.fcb}}</span>
+              <button type="button" onClick="{{incFcb}}" aria-label="Tor FC Bayern hinzufügen" style="width: 44px; height: 44px; border: 2px solid #FFFFFF; background: #C4122F; color: #FFFFFF; font-family: 'Alfa Slab One', Georgia, serif; font-size: 22px; cursor: pointer">+</button>
+            </div>
+          </div>
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 30px; color: #8FA6C4" aria-hidden="true">:</span>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #DCE6F2">Gegner</span>
+            <div style="display: flex; align-items: center; gap: 8px">
+              <button type="button" onClick="{{decOpp}}" aria-label="Tor Gegner abziehen" style="width: 44px; height: 44px; border: 2px solid #FFFFFF; background: transparent; color: #FFFFFF; font-family: 'Alfa Slab One', Georgia, serif; font-size: 22px; cursor: pointer">−</button>
+              <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 40px; line-height: 1; min-width: 30px; text-align: center">{{form.og}}</span>
+              <button type="button" onClick="{{incOpp}}" aria-label="Tor Gegner hinzufügen" style="width: 44px; height: 44px; border: 2px solid #FFFFFF; background: #C4122F; color: #FFFFFF; font-family: 'Alfa Slab One', Georgia, serif; font-size: 22px; cursor: pointer">+</button>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; padding-top: 4px">
+          <span style="{{preview.style}}">{{preview.label}}</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 4px">
+        <button type="button" onClick="{{cancel}}" style="height: 52px; border: 2px solid #1B1B1B; background: #FFFBF3; color: #1B1B1B; font-family: 'Barlow Condensed', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer">Abbrechen</button>
+        <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="{{saveStyle}}">Speichern</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isStats}}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div style="background: #C4122F; color: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; padding: 14px 12px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Siegquote</span>
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 40px; line-height: 1.05">{{total.pct}}</span>
+          <span style="font-size: 15px; font-weight: 600">{{total.w}} von {{total.n}} Spielen</span>
+        </div>
+        <div style="background: #0E2A4F; color: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; padding: 14px 12px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Torbilanz</span>
+          <span style="font-family: 'Alfa Slab One', Georgia, serif; font-size: 40px; line-height: 1.05">{{total.gf}}:{{total.ga}}</span>
+          <span style="font-size: 15px; font-weight: 600">{{total.avg}} Tore pro Spiel</span>
+        </div>
+      </div>
+
+      <section style="background: #FFFBF3; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-family: 'Alfa Slab One', Georgia, serif; font-size: 18px; font-weight: 400; letter-spacing: 0.5px">Letzte Spiele</h2>
+        <div style="display: flex; gap: 8px">
+          <sc-for list="{{lastFive}}" as="r" hint-placeholder-count="5">
+            <span style="{{r.style}}" title="{{r.title}}">{{r.letter}}</span>
+          </sc-for>
+        </div>
+        <span style="font-size: 13px; font-weight: 600; color: #4A4238">Neuestes Spiel links</span>
+      </section>
+
+      <section style="background: #FFFBF3; border: 2px solid #1B1B1B; box-shadow: 4px 4px 0 #1B1B1B; padding: 14px 12px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-family: 'Alfa Slab One', Georgia, serif; font-size: 18px; font-weight: 400; letter-spacing: 0.5px">Nach Wettbewerb</h2>
+        <sc-for list="{{perComp}}" as="c" hint-placeholder-count="3">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700"><span style="width: 40px; height: 28px; background: #FFFFFF; border: 2px solid #1B1B1B; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 2px"><img src="{{c.logo}}" alt="" style="max-width: 34px; max-height: 22px; object-fit: contain"></span>{{c.label}}</span>
+              <span style="font-size: 15px; font-weight: 600; color: #4A4238">{{c.n}} Sp. · {{c.w}}-{{c.d}}-{{c.l}} · {{c.gf}}:{{c.ga}}</span>
+            </div>
+            <div style="height: 14px; border: 2px solid #1B1B1B; background: #F4ECDC; display: flex; overflow: hidden">
+              <span style="{{c.wStyle}}"></span>
+              <span style="{{c.dStyle}}"></span>
+              <span style="{{c.lStyle}}"></span>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 14px; font-size: 13px; font-weight: 600; color: #4A4238">
+          <span style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 10px; background: #C4122F; border: 1px solid #1B1B1B"></span>Sieg</span>
+          <span style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 10px; background: #CDBF9F; border: 1px solid #1B1B1B"></span>Remis</span>
+          <span style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 10px; background: #1B1B1B; border: 1px solid #1B1B1B"></span>Niederlage</span>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <nav aria-label="Hauptnavigation" style="flex-shrink: 0; height: 78px; background: #0E2A4F; border-top: 4px solid #1B1B1B; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center">
+    <button type="button" onClick="{{goList}}" style="{{tabList}}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+      Spiele
+    </button>
+    <div style="display: flex; justify-content: center">
+      <button type="button" onClick="{{goAdd}}" aria-label="Neues Spiel eintragen" style="width: 64px; height: 64px; border-radius: 50%; background: #C4122F; border: 3px solid #FFFFFF; box-shadow: 0 0 0 3px #1B1B1B; color: #FFFFFF; display: flex; align-items: center; justify-content: center; margin-top: -30px; cursor: pointer">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+      </button>
+    </div>
+    <button type="button" onClick="{{goStats}}" style="{{tabStats}}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"></path></svg>
+      Bilanz
+    </button>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startScreen":{"editor":"enum","options":["list","add","stats"],"default":"list"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screen: (props && props.startScreen) || 'list',
+      filter: 'all',
+      games: [
+        { id: 1, date: '2026-10-28', comp: 'pokal', home: true, opp: '1. FC Köln', fcb: 4, og: 1 },
+        { id: 2, date: '2026-10-21', comp: 'cl', home: true, opp: 'Inter Mailand', fcb: 2, og: 0 },
+        { id: 3, date: '2026-10-18', comp: 'bl', home: true, opp: 'Borussia Dortmund', fcb: 2, og: 2 },
+        { id: 4, date: '2026-10-04', comp: 'bl', home: false, opp: 'VfB Stuttgart', fcb: 3, og: 1 },
+        { id: 5, date: '2026-09-30', comp: 'cl', home: true, opp: 'Benfica Lissabon', fcb: 1, og: 0 },
+        { id: 6, date: '2026-09-20', comp: 'bl', home: true, opp: 'Bayer 04 Leverkusen', fcb: 1, og: 2 },
+        { id: 7, date: '2026-08-29', comp: 'bl', home: true, opp: 'SC Freiburg', fcb: 5, og: 0 }
+      ],
+      form: { date: '2026-10-31', comp: 'bl', home: true, opp: '', fcb: 0, og: 0 }
+    };
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.startScreen !== this.props.startScreen && this.props.startScreen) {
+      this.setState({ screen: this.props.startScreen });
+    }
+  }
+
+  setForm(patch) {
+    this.setState({ form: Object.assign({}, this.state.form, patch) });
+  }
+
+  renderVals() {
+    const RED = '#C4122F', NAVY = '#0E2A4F', INK = '#1B1B1B', CREAM = '#F4ECDC', PAPER = '#FFFBF3';
+    const COMPS = {
+      bl: { label: 'Bundesliga', short: 'Bundesliga', bg: RED, fg: '#FFFFFF', logo: '/_blob/d4ecade01c55be8fe50e24adac44b84e' },
+      pokal: { label: 'DFB-Pokal', short: 'DFB-Pokal', bg: NAVY, fg: '#FFFFFF', logo: '/_blob/5272803e7938819efcd63203c07ccb90' },
+      cl: { label: 'Champions League', short: 'Champions L.', bg: INK, fg: CREAM, logo: '/_blob/31bc2b9d4591ad02c21b3aeef34b14de' }
+    };
+    const WD = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+    const s = this.state;
+
+    const result = (g) => (g.fcb > g.og ? 'w' : g.fcb === g.og ? 'd' : 'l');
+    const RES = {
+      w: { label: 'Sieg', letter: 'S', bg: RED, fg: '#FFFFFF' },
+      d: { label: 'Remis', letter: 'U', bg: '#E6DCC6', fg: INK },
+      l: { label: 'Niederlage', letter: 'N', bg: INK, fg: '#FFFFFF' }
+    };
+    const fmtDate = (iso) => {
+      const d = new Date(iso + 'T12:00:00');
+      if (isNaN(d.getTime())) return iso;
+      const p = (n) => String(n).padStart(2, '0');
+      return WD[d.getDay()] + ' ' + p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear();
+    };
+    const stat = (list) => {
+      const o = { n: list.length, w: 0, d: 0, l: 0, gf: 0, ga: 0 };
+      list.forEach((g) => { o[result(g)]++; o.gf += g.fcb; o.ga += g.og; });
+      o.pct = o.n ? Math.round((o.w / o.n) * 100) + ' %' : '–';
+      o.avg = o.n ? (o.gf / o.n).toFixed(1).replace('.', ',') : '0';
+      return o;
+    };
+
+    const sorted = s.games.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.id - a.id));
+    const visible = s.filter === 'all' ? sorted : sorted.filter((g) => g.comp === s.filter);
+
+    const teamStyle = (isFcb, align) =>
+      'font-size: 19px; line-height: 1.1; font-weight: ' + (isFcb ? '700' : '600') + '; color: ' + (isFcb ? RED : INK) +
+      '; text-align: ' + align + '; text-transform: uppercase; letter-spacing: 0.3px; overflow-wrap: anywhere';
+
+    const cards = visible.map((g) => {
+      const r = RES[result(g)];
+      const c = COMPS[g.comp];
+      return {
+        key: g.id,
+        dateLabel: fmtDate(g.date),
+        compLabel: c.label,
+        logo: c.logo,
+        badgeStyle: 'color: ' + INK + '; font-size: 15px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase',
+        homeName: g.home ? 'FC Bayern' : g.opp,
+        awayName: g.home ? g.opp : 'FC Bayern',
+        homeGoals: g.home ? g.fcb : g.og,
+        awayGoals: g.home ? g.og : g.fcb,
+        homeStyle: teamStyle(g.home, 'right'),
+        awayStyle: teamStyle(!g.home, 'left'),
+        venue: g.home ? 'Allianz Arena' : 'Auswärts',
+        resLabel: r.label,
+        resStyle: 'background: ' + r.bg + '; color: ' + r.fg + '; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border: 2px solid ' + INK
+      };
+    });
+
+    const chipDefs = [{ id: 'all', label: 'Alle' }, { id: 'bl', label: 'Bundesliga' }, { id: 'pokal', label: 'DFB-Pokal' }, { id: 'cl', label: 'Champions League' }];
+    const chips = chipDefs.map((c) => {
+      const on = s.filter === c.id;
+      return {
+        label: c.label,
+        hasLogo: !!COMPS[c.id],
+        logo: COMPS[c.id] ? COMPS[c.id].logo : '',
+        pressed: on ? 'true' : 'false',
+        pick: () => this.setState({ filter: c.id }),
+        style: 'min-height: 44px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border: 2px solid ' + INK + '; background: ' + (on ? INK : PAPER) + '; color: ' + (on ? '#FFFFFF' : INK) +
+          "; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer"
+      };
+    });
+
+    const segStyle = (on, i) =>
+      'min-height: 48px; padding: 0 6px; border: none; ' + (i > 0 ? 'border-left: 2px solid ' + INK + '; ' : '') +
+      'background: ' + (on ? RED : 'transparent') + '; color: ' + (on ? '#FFFFFF' : INK) +
+      "; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer";
+
+    const f = s.form;
+    const compOpts = ['bl', 'pokal', 'cl'].map((k, i) => ({
+      label: COMPS[k].short, logo: COMPS[k].logo, pressed: f.comp === k ? 'true' : 'false', style: segStyle(f.comp === k, i) + '; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px', pick: () => this.setForm({ comp: k })
+    }));
+    const venueOpts = [{ v: true, label: 'Heim' }, { v: false, label: 'Auswärts' }].map((o, i) => ({
+      label: o.label, pressed: f.home === o.v ? 'true' : 'false', style: segStyle(f.home === o.v, i), pick: () => this.setForm({ home: o.v })
+    }));
+
+    const pr = RES[result(f)];
+    const canSave = f.opp.trim().length > 0 && !!f.date;
+
+    const total = stat(s.games);
+    const perComp = ['bl', 'pokal', 'cl'].map((k) => {
+      const o = stat(s.games.filter((g) => g.comp === k));
+      const w = (x) => (o.n ? (x / o.n) * 100 : 0) + '%';
+      return Object.assign(o, {
+        label: COMPS[k].label,
+        logo: COMPS[k].logo,
+        wStyle: 'width: ' + w(o.w) + '; background: ' + RED,
+        dStyle: 'width: ' + w(o.d) + '; background: #CDBF9F',
+        lStyle: 'width: ' + w(o.l) + '; background: ' + INK
+      });
+    });
+    const lastFive = sorted.slice(0, 5).map((g) => {
+      const r = RES[result(g)];
+      return {
+        letter: r.letter,
+        title: fmtDate(g.date) + ' – ' + g.opp,
+        style: "width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-family: 'Alfa Slab One', Georgia, serif; font-size: 20px; background: " + r.bg + '; color: ' + r.fg + '; border: 2px solid ' + INK
+      };
+    });
+
+    const tab = (on) =>
+      'height: 100%; border: none; background: transparent; color: ' + (on ? '#FFFFFF' : '#A9BAD1') +
+      "; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer" +
+      (on ? '; box-shadow: inset 0 -4px 0 ' + RED : '');
+
+    const SUB = { list: 'Meine Spiele · Saison 26/27', add: 'Spiel eintragen', stats: 'Bilanz · Saison 26/27' };
+    const clampAdd = (key, d) => () => this.setForm({ [key]: Math.max(0, Math.min(20, this.state.form[key] + d)) });
+
+    return {
+      headerSub: SUB[s.screen] || SUB.list,
+      isList: s.screen === 'list',
+      isAdd: s.screen === 'add',
+      isStats: s.screen === 'stats',
+      isEmpty: cards.length === 0,
+      cards, chips, compOpts, venueOpts, total, perComp, lastFive,
+      form: f,
+      preview: {
+        label: f.opp.trim() ? r_label(pr, f) : pr.label,
+        style: 'background: ' + pr.bg + '; color: ' + pr.fg + '; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border: 2px solid ' + INK
+      },
+      setDate: (e) => this.setForm({ date: e.target.value }),
+      setOpp: (e) => this.setForm({ opp: e.target.value }),
+      incFcb: clampAdd('fcb', 1), decFcb: clampAdd('fcb', -1),
+      incOpp: clampAdd('og', 1), decOpp: clampAdd('og', -1),
+      saveDisabled: !canSave,
+      saveStyle: 'height: 52px; border: 2px solid ' + INK + '; background: ' + (canSave ? RED : '#D9CDB6') + '; color: ' + (canSave ? '#FFFFFF' : '#5C5346') +
+        "; box-shadow: " + (canSave ? '4px 4px 0 ' + INK : 'none') + "; font-family: 'Barlow Condensed', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: " + (canSave ? 'pointer' : 'not-allowed'),
+      save: () => {
+        if (!canSave) return;
+        const g = Object.assign({}, this.state.form, { id: Date.now(), opp: this.state.form.opp.trim() });
+        this.setState({
+          games: this.state.games.concat([g]),
+          form: { date: g.date, comp: g.comp, home: true, opp: '', fcb: 0, og: 0 },
+          screen: 'list',
+          filter: 'all'
+        });
+      },
+      cancel: () => this.setState({ screen: 'list' }),
+      goList: () => this.setState({ screen: 'list' }),
+      goAdd: () => this.setState({ screen: 'add' }),
+      goStats: () => this.setState({ screen: 'stats' }),
+      tabList: tab(s.screen === 'list'),
+      tabStats: tab(s.screen === 'stats')
+    };
+
+    function r_label(res, form) {
+      return res.label + ' gegen ' + form.opp.trim();
+    }
+  }
+}
+</script>
+</body>
+</html>
