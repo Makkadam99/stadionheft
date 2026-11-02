@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Header, TabBar } from './components/Chrome';
+import { DebugInfo } from './components/DebugInfo';
 import { GameList, type Filter } from './screens/GameList';
 import { GameForm } from './screens/GameForm';
 import { Stats, type SeasonFilter } from './screens/Stats';
@@ -14,6 +15,7 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'list' });
   const [filter, setFilter] = useState<Filter>('all');
   const [season, setSeason] = useState<SeasonFilter | null>(null);
+  const [debug, setDebug] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
   const reload = useCallback(async () => setGames(sortGames(await loadGames())), []);
@@ -72,7 +74,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header sub={sub} />
+      <Header sub={sub} onSecret={() => setDebug(true)} />
+      {debug && <DebugInfo onClose={() => setDebug(false)} />}
       <main className="main" ref={mainRef}>
         {screen.name === 'list' && (
           <GameList games={games} filter={filter} onFilter={setFilter} onOpen={(g) => setScreen({ name: 'form', game: g })} />

@@ -1,6 +1,18 @@
+import { useRef } from 'react';
 import fcbLogo from '../../assets/fcb.png';
 
-export function Header({ sub }: { sub: string }) {
+/** onSecret: wird ausgelöst, wenn das Wappen 5× innerhalb von 2 Sekunden angetippt wird */
+export function Header({ sub, onSecret }: { sub: string; onSecret?: () => void }) {
+  const taps = useRef<number[]>([]);
+  const tapCrest = () => {
+    const now = Date.now();
+    taps.current = [...taps.current.filter((t) => now - t < 2000), now];
+    if (taps.current.length >= 5) {
+      taps.current = [];
+      onSecret?.();
+    }
+  };
+
   return (
     <>
       <div className="safe-top" aria-hidden="true" />
@@ -10,7 +22,7 @@ export function Header({ sub }: { sub: string }) {
           <h1 className="header__title">STADIONHEFT</h1>
           <span className="header__sub">{sub}</span>
         </div>
-        <div className="crest">
+        <div className="crest" onClick={tapCrest}>
           <img src={fcbLogo} alt="FC Bayern München" />
         </div>
       </header>
