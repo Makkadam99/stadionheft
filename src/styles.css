@@ -27,21 +27,29 @@ body {
   overscroll-behavior: none;
 }
 
+/* Falls auf dem Handy doch ein Rand frei bleibt: oben dunkel wie die Statusleiste, unten blau wie die Tab-Leiste */
+@media (max-width: 520px) {
+  body { background: linear-gradient(var(--ink) 50%, var(--navy) 50%); }
+}
+
 button { font-family: var(--cond); cursor: pointer; }
 button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
 
 /* ---------- Rahmen ---------- */
 
+/* Fest am Bildschirm verankert: 100dvh ist auf dem iPhone als Home-Bildschirm-App zu kurz */
 .app {
-  height: 100%;
-  height: 100dvh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   max-width: 520px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   background: var(--cream);
   overflow: hidden;
-  position: relative;
 }
 
 .safe-top { height: env(safe-area-inset-top); background: var(--ink); flex-shrink: 0; }
@@ -118,17 +126,22 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
 /* ---------- Tab-Leiste ---------- */
 
 .tabbar {
+  /* Abstand zum iPhone-Home-Balken; etwas knapper als der volle Safe-Area-Wert, damit die Tabs tief sitzen */
+  --home-gap: max(0px, calc(env(safe-area-inset-bottom) - 14px));
+  /* Eigene Ebene über dem Scrollbereich, sonst verdecken die Karten auf iOS den „+“-Button */
+  position: relative;
+  z-index: 10;
   flex-shrink: 0;
-  height: calc(78px + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
+  height: calc(74px + var(--home-gap));
   background: var(--navy);
   border-top: 4px solid var(--ink);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: center;
+  align-items: stretch;
 }
 .tab {
-  height: 100%;
+  /* Tabs reichen bis an den Bildschirmrand, der rote Strich liegt ganz unten */
+  padding: 0 0 var(--home-gap);
   border: none;
   background: transparent;
   color: #a9bad1;
@@ -143,7 +156,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   text-transform: uppercase;
 }
 .tab--on { color: #fff; box-shadow: inset 0 -4px 0 var(--red); }
-.tabbar__plus-wrap { display: flex; justify-content: center; }
+.tabbar__plus-wrap { display: flex; justify-content: center; align-items: flex-start; }
 .tabbar__plus {
   width: 64px;
   height: 64px;
@@ -155,7 +168,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -30px;
+  margin-top: -24px;
 }
 .tabbar__plus:active { background: var(--red-dark); }
 
