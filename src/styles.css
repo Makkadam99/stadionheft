@@ -29,7 +29,8 @@ body {
 
 /* Falls auf dem Handy doch ein Rand frei bleibt: oben dunkel wie die Statusleiste, unten blau wie die Tab-Leiste */
 @media (max-width: 520px) {
-  body { background: linear-gradient(var(--ink) 50%, var(--navy) 50%); }
+  /* Die Grundfarbe zählt: iOS malt Flächen außerhalb des Viewports nur mit ihr, nicht mit dem Verlauf */
+  body { background: var(--navy) linear-gradient(var(--ink) 50%, var(--navy) 50%); }
 }
 
 button { font-family: var(--cond); cursor: pointer; }
@@ -41,7 +42,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
 .app {
   position: fixed;
   top: 0;
-  bottom: 0;
+  bottom: calc(-1 * var(--vp-gap, 0px)); /* siehe viewportFix.ts */
   left: 0;
   right: 0;
   max-width: 520px;
