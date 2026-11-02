@@ -300,6 +300,10 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   padding: 12px 12px 14px;
 }
 .team {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   font-size: 19px;
   line-height: 1.1;
   font-weight: 600;
@@ -307,7 +311,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   letter-spacing: 0.3px;
   overflow-wrap: anywhere;
 }
-.team--home { text-align: right; }
+.team--home { text-align: right; align-items: flex-end; }
 .team--fcb { font-weight: 700; color: var(--red); }
 .score {
   font-family: var(--slab);
@@ -378,6 +382,9 @@ select.input {
 
 .suggestions { display: flex; gap: 8px; flex-wrap: wrap; }
 .suggestion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-height: 44px;
   padding: 0 12px;
   border: 2px solid var(--ink);
@@ -452,6 +459,30 @@ select.input {
 
 .delete-box { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
 .delete-box__q { margin: 0; font-size: 17px; font-weight: 700; text-align: center; }
+
+/* ---------- Vereinswappen ---------- */
+
+.crest-img { display: block; flex-shrink: 0; object-fit: contain; }
+.crest-img--sm { width: 26px; height: 26px; }
+.crest-img--md { width: 36px; height: 36px; }
+.crest-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--navy);
+  color: #fff;
+  border: 2px solid var(--ink);
+  font-family: var(--slab);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.crest-badge.crest-img--sm { font-size: 10px; }
+/* Auf dem dunklen Ergebnisfeld: Wappen auf weißer runder Scheibe wie im Header */
+.scoreboard .crest-img--md { width: 44px; height: 44px; }
+.scoreboard img.crest-img { background: #fff; border: 2px solid var(--ink); border-radius: 50%; padding: 4px; }
+.scoreboard .crest-badge { border-color: #fff; background: var(--red); }
 
 /* ---------- Bilanz ---------- */
 

@@ -6,6 +6,7 @@ import { GameForm } from './screens/GameForm';
 import { Stats, type SeasonFilter } from './screens/Stats';
 import { deleteGame, loadGames, putGames, requestPersistence, saveGame } from './db';
 import { exportGames, parseBackup } from './backup';
+import { canonicalName } from './clubs';
 import { seasonLabel, seasonOf, sortGames, todayIso, type Game } from './model';
 
 type Screen = { name: 'list' } | { name: 'form'; game?: Game } | { name: 'stats' };
@@ -18,7 +19,16 @@ export default function App() {
   const [debug, setDebug] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
-  const reload = useCallback(async () => setGames(sortGames(await loadGames())), []);
+  const reload = useCallback(async () => {
+    const all = await loadGames();
+    // Frei getippte Gegner (auch aus Backups) auf den offiziellen Vereinsnamen umstellen
+    const renamed = all
+      .filter((g) => canonicalName(g.opponent) !== g.opponent)
+      .map((g) => ({ ...g, opponent: canonicalName(g.opponent) }));
+    if (renamed.length) await putGames(renamed);
+    const byId = new Map(renamed.map((g) => [g.id, g]));
+    setGames(sortGames(all.map((g) => byId.get(g.id) ?? g)));
+  }, []);
 
   useEffect(() => {
     requestPersistence();

@@ -1,4 +1,4 @@
-import { LogoBox } from '../components/Chrome';
+import { ClubCrest, LogoBox } from '../components/Chrome';
 import { COMPETITIONS, COMP_INFO, RESULT_INFO, formatDate, resultOf, statsOf, type Competition, type Game } from '../model';
 
 export type Filter = 'all' | Competition;
@@ -67,9 +67,15 @@ function Ticket({ game: g, onOpen }: { game: Game; onOpen: () => void }) {
         <span className="ticket__date">{formatDate(g.date)}</span>
       </span>
       <span className="ticket__match">
-        <span className={'team team--home' + (g.home ? ' team--fcb' : '')}>{homeName}</span>
+        <span className={'team team--home' + (g.home ? ' team--fcb' : '')}>
+          <ClubCrest name={homeName} bayern={g.home} size="md" />
+          {homeName}
+        </span>
         <span className="score">{homeGoals}:{awayGoals}</span>
-        <span className={'team' + (g.home ? '' : ' team--fcb')}>{awayName}</span>
+        <span className={'team' + (g.home ? '' : ' team--fcb')}>
+          <ClubCrest name={awayName} bayern={!g.home} size="md" />
+          {awayName}
+        </span>
       </span>
       <span className="ticket__bottom">
         <span className="ticket__venue">{g.home ? 'Allianz Arena' : 'Auswärts'}</span>

@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import fcbLogo from '../../assets/fcb.png';
+import { BAYERN_LOGO, findClub, initialsOf } from '../clubs';
 
 /** onSecret: wird ausgelöst, wenn das Wappen 5× innerhalb von 2 Sekunden angetippt wird */
 export function Header({ sub, onSecret }: { sub: string; onSecret?: () => void }) {
@@ -62,6 +63,16 @@ export function TabBar({ active, onList, onAdd, onStats }: TabBarProps) {
         Bilanz
       </button>
     </nav>
+  );
+}
+
+/** Vereinswappen; Vereine ohne hinterlegtes Wappen bekommen ein Abzeichen mit Kürzel */
+export function ClubCrest({ name, bayern, size }: { name: string; bayern?: boolean; size: 'sm' | 'md' }) {
+  const logo = bayern ? BAYERN_LOGO : findClub(name)?.logo;
+  return logo ? (
+    <img className={`crest-img crest-img--${size}`} src={logo} alt="" />
+  ) : (
+    <span className={`crest-badge crest-img--${size}`} aria-hidden="true">{initialsOf(name)}</span>
   );
 }
 

@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
-import { LogoBox } from '../components/Chrome';
+import { useMemo, useState, type ReactNode } from 'react';
+import { ClubCrest, LogoBox } from '../components/Chrome';
+import { canonicalName, suggestClubs } from '../clubs';
 import { COMPETITIONS, COMP_INFO, MAX_GOALS, RESULT_INFO, newId, resultOf, todayIso, type Game } from '../model';
 
 interface Props {
@@ -24,14 +25,11 @@ export function GameForm({ initial, defaults, opponents, onSave, onDelete, onCan
   const canSave = opp !== '' && form.date !== '';
   const res = resultOf(form);
 
-  const suggestions = useMemo(() => {
-    const q = opp.toLowerCase();
-    if (!q) return [];
-    return opponents.filter((o) => o.toLowerCase().includes(q) && o.toLowerCase() !== q).slice(0, 6);
-  }, [opp, opponents]);
+  const suggestions = useMemo(() => suggestClubs(opp, opponents), [opp, opponents]);
 
   const save = () => {
-    if (canSave) onSave({ ...form, opponent: opp });
+    // Bekannte Schreibweisen (z. B. „BVB“) werden als offizieller Vereinsname gespeichert
+    if (canSave) onSave({ ...form, opponent: canonicalName(opp) });
   };
 
   return (
@@ -77,7 +75,10 @@ export function GameForm({ initial, defaults, opponents, onSave, onDelete, onCan
         {suggestions.length > 0 && (
           <div className="suggestions" role="group" aria-label="Vorschläge">
             {suggestions.map((s) => (
-              <button key={s} type="button" className="suggestion" onClick={() => patch({ opponent: s })}>{s}</button>
+              <button key={s} type="button" className="suggestion" onClick={() => patch({ opponent: s })}>
+                <ClubCrest name={s} size="sm" />
+                {s}
+              </button>
             ))}
           </div>
         )}
@@ -86,9 +87,15 @@ export function GameForm({ initial, defaults, opponents, onSave, onDelete, onCan
       <div className="field" style={{ gap: 8 }}>
         <span className="field__label">Ergebnis</span>
         <div className="scoreboard">
-          <ScoreSide label="FC Bayern" who="FC Bayern" value={form.goalsBayern} onStep={(d) => step('goalsBayern', d)} />
+          <ScoreSide label="FC Bayern" who="FC Bayern" crest={<ClubCrest name="FC Bayern" bayern size="md" />} value={form.goalsBayern} onStep={(d) => step('goalsBayern', d)} />
           <span className="scoreboard__colon" aria-hidden="true">:</span>
-          <ScoreSide label={opp || 'Gegner'} who="Gegner" value={form.goalsOpponent} onStep={(d) => step('goalsOpponent', d)} />
+          <ScoreSide
+            label={opp ? canonicalName(opp) : 'Gegner'}
+            who="Gegner"
+            crest={opp ? <ClubCrest name={opp} size="md" /> : <span className="crest-img--md" />}
+            value={form.goalsOpponent}
+            onStep={(d) => step('goalsOpponent', d)}
+          />
         </div>
         <div className="preview" aria-live="polite">
           <span className={`badge res-${res}`}>
@@ -124,13 +131,15 @@ export function GameForm({ initial, defaults, opponents, onSave, onDelete, onCan
 interface ScoreSideProps {
   label: string;
   who: string;
+  crest: ReactNode;
   value: number;
   onStep: (d: number) => void;
 }
 
-function ScoreSide({ label, who, value, onStep }: ScoreSideProps) {
+function ScoreSide({ label, who, crest, value, onStep }: ScoreSideProps) {
   return (
     <div className="scoreboard__side">
+      {crest}
       <span className="scoreboard__name">{label}</span>
       <div className="scoreboard__ctrl">
         <button type="button" className="step" onClick={() => onStep(-1)} disabled={value <= 0} aria-label={`Tor ${who} abziehen`}>−</button>
