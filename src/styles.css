@@ -42,7 +42,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
 .app {
   position: fixed;
   top: 0;
-  bottom: calc(-1 * var(--vp-gap, 0px)); /* siehe viewportFix.ts */
+  bottom: 0;
   left: 0;
   right: 0;
   max-width: 520px;
