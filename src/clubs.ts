@@ -145,6 +145,30 @@ export function canonicalName(name: string): string {
 
 export const BAYERN_LOGO = fcbLogo;
 
+// Trennstellen für lange Wörter, damit Namen nur an Wortfugen umbrechen („Mönchen-gladbach“)
+const SPLITS: Record<string, string> = {
+  bournemouth: 'Bourne|mouth',
+  braunschweig: 'Braun|schweig',
+  fiorentina: 'Fioren|tina',
+  internazionale: 'Inter|nazionale',
+  manchester: 'Man|chester',
+  nottingham: 'Notting|ham',
+  leverkusen: 'Lever|kusen'
+};
+const SUFFIX = /(gladbach|lautern|kirchen|hausen|münster|heim|berg|burg|bach|dorf|feld|stadt|brück)$/i;
+const SHY = '­';
+
+/** Name mit weichen Trennstellen (nur sichtbar, wenn dort umgebrochen wird) */
+export function breakableName(name: string): string {
+  return name.split(' ').map((w) => {
+    if (w.length < 10) return w;
+    const split = SPLITS[w.toLowerCase()];
+    if (split) return split.replace('|', SHY);
+    const m = SUFFIX.exec(w);
+    return m && m.index >= 4 ? w.slice(0, m.index) + SHY + w.slice(m.index) : w;
+  }).join(' ');
+}
+
 /** Kürzel für Vereine ohne Wappen, z. B. „Hansa Rostock“ → „HR“, „TSV 1860 München“ → „T1M“ */
 export function initialsOf(name: string): string {
   const all = name.split(/[\s-]+/).filter((w) => /^[A-Za-zÄÖÜäöü0-9]/.test(w));

@@ -1,4 +1,5 @@
 import { ClubCrest, LogoBox } from '../components/Chrome';
+import { breakableName } from '../clubs';
 import { COMPETITIONS, COMP_INFO, RESULT_INFO, formatDate, resultOf, statsOf, type Competition, type Game } from '../model';
 
 export type Filter = 'all' | Competition;
@@ -69,12 +70,12 @@ function Ticket({ game: g, onOpen }: { game: Game; onOpen: () => void }) {
       <span className="ticket__match">
         <span className={'team' + (g.home ? ' team--fcb' : '')}>
           <ClubCrest name={homeName} bayern={g.home} size="md" />
-          {homeName}
+          {breakableName(homeName)}
         </span>
         <span className="score">{homeGoals}:{awayGoals}</span>
         <span className={'team' + (g.home ? '' : ' team--fcb')}>
           <ClubCrest name={awayName} bayern={!g.home} size="md" />
-          {awayName}
+          {breakableName(awayName)}
         </span>
       </span>
       <span className="ticket__bottom">

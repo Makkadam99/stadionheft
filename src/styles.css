@@ -311,7 +311,10 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  overflow-wrap: anywhere;
+  /* Umbruch nur zwischen Wörtern oder an den weichen Trennstellen aus breakableName */
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  overflow-wrap: break-word;
 }
 .team--fcb { font-weight: 700; color: var(--red); }
 .score {
