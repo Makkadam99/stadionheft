@@ -67,7 +67,7 @@ function Ticket({ game: g, onOpen }: { game: Game; onOpen: () => void }) {
         <span className="ticket__date">{formatDate(g.date)}</span>
       </span>
       <span className="ticket__match">
-        <span className={'team team--home' + (g.home ? ' team--fcb' : '')}>
+        <span className={'team' + (g.home ? ' team--fcb' : '')}>
           <ClubCrest name={homeName} bayern={g.home} size="md" />
           {homeName}
         </span>

@@ -302,7 +302,9 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
 .team {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* Wappen und Name mittig übereinander, egal wie lang der Name ist */
+  align-items: center;
+  text-align: center;
   gap: 6px;
   font-size: 19px;
   line-height: 1.1;
@@ -311,7 +313,6 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   letter-spacing: 0.3px;
   overflow-wrap: anywhere;
 }
-.team--home { text-align: right; align-items: flex-end; }
 .team--fcb { font-weight: 700; color: var(--red); }
 .score {
   font-family: var(--slab);
