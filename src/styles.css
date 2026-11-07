@@ -1,6 +1,7 @@
 :root {
   --red: #c4122f;
   --red-dark: #b30f2a;
+  --red-crest: #e72a2a; /* Rot aus dem FCB-Wappen (assets/fcb.png) */
   --navy: #0e2a4f;
   --ink: #1b1b1b;
   --cream: #f4ecdc;
@@ -316,7 +317,7 @@ button:focus-visible { outline: 3px solid var(--rauten); outline-offset: 2px; }
   -webkit-hyphens: manual;
   overflow-wrap: break-word;
 }
-.team--fcb { font-weight: 700; color: var(--red); }
+.team--fcb { font-weight: 700; color: var(--red-crest); }
 .score {
   font-family: var(--slab);
   font-size: 26px;
